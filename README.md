@@ -29,7 +29,7 @@ py.test -v
 ## Example invocation
 
 ```
-$ ./thumbp_server -e http://my-es-server:9200/dpla_alias -l app.log \
+$ ./thumbp_server -e http://my-es-server:9200/dpla_alias/item -l app.log \
    -f thumbp.pid
 ```
 
@@ -45,8 +45,6 @@ Example thumbnail given that invocation:
 
 ## TODO
 
-* Try to get back from Elasticsearch only the field we need instead of the
-  whole document.
 * Get server to detach when it runs and log to a provided file instead of
   stderr. (See WSGIServer re logging.)
 * We may want to pass through more headers, like Last-Modified, although this

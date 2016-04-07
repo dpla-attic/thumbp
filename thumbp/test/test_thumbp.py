@@ -11,15 +11,20 @@ class MockResult:
     def json(self):
         return {
             'hits': {
-                'hits': [{'_source': {'object': 'http://object/url'}}]
+                'hits': [{
+                    'fields': {
+                        'id': 'b3039064282a263cad6e57e76ad9caa8',
+                        'object': 'http://object/url'
+                    }
+                }]
             }
         }
 
 
 class TestThumb:
     def test_es_url_is_correct(self, monkeypatch):
-        correct_es_url = "http://localhost:9200/testindex/_search?q=id:%s" % \
-                         good_item_id
+        correct_es_url = "http://localhost:9200/testindex/_search?q=id:%s" \
+                         "&fields=id,object" % good_item_id
         def mockget(url):
             assert url == correct_es_url
             return True
