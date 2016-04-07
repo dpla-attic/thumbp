@@ -3,3 +3,5 @@ __pycache__
 thumbp.egg-info
 *.log
 *.pid
+build
+dist
