@@ -4,7 +4,7 @@
 
 1. Install pyenv.  Install Python 3.5.1.
 2. Change into the directory containing this project
-2. `pip install -r requirements.txt`
+2. `python setup.py install` or `pip install -r requirements.txt`
 3. `./thumbp_server -h`
 
 ## Setting up with virtualenv
