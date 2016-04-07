@@ -22,7 +22,7 @@ def thumb(item_id):
     
     try:
         es_res = elasticsearch_result(item_id)
-        url = es_res.json()['hits']['hits'][0]['_source']['object']
+        url = es_res.json()['hits']['hits'][0]['fields']['object']
     except KeyError:
         app.logger.error("%s does not have 'object' property" % item_id)
         abort(404)
@@ -49,7 +49,7 @@ def thumb(item_id):
         app.logger.error("could not get %s: %s" % (url, e))
 
 def elasticsearch_result(item_id):
-    query_url = es_base + "/_search?q=id:%s" % item_id
+    query_url = es_base + "/_search?q=id:%s&fields=id,object" % item_id
     app.logger.debug("query_url: %s" % query_url)
     return requests.get(query_url)
 
