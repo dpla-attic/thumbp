@@ -29,7 +29,7 @@ py.test -v
 ## Example invocation
 
 ```
-$ ./gevent_wsgi.py -e http://my-es-server:9200/dpla_alias -l app.log \
+$ ./thumbp_server -e http://my-es-server:9200/dpla_alias -l app.log \
    -f thumbp.pid
 ```
 
