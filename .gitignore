@@ -1,6 +1,6 @@
-__pycache__
 .cache
 thumbp.egg-info
+*.pyc
 *.log
 *.pid
 build

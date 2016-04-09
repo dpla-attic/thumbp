@@ -9,11 +9,9 @@ setup(
     description='Proxy server for DPLA infrastructure, to serve provider '
                 'thumbnail images from a consistent location',
     packages=['thumbp'],
-    scripts=['thumbp_server'],
     install_requires=[
-        'Flask>=0.10.0,<1.0',
-        'gevent>=1.0,<2.0',
-        'requests>=2.9,<3.0'
+        'klein>=15.3,<15.4',
+        'treq>=15.1,<15.2'
         ],
     extras_require={'testing': ['pytest']},
     test_suite='thumbp.test.test_thumbp'

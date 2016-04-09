@@ -38,5 +38,5 @@ class TestValidId:
         assert thumbp.valid_id(good_item_id) == good_item_id
 
     def test_valid_id_raises_exception(self):
-        with pytest.raises(werkzeug.exceptions.Forbidden):
+        with pytest.raises(thumbp.Forbidden):
             thumbp.valid_id('x')
