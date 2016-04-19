@@ -1,7 +1,3 @@
-.cache
-thumbp.egg-info
-*.pyc
 *.log
 *.pid
-build
-dist
+node_modules
