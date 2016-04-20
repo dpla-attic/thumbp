@@ -2,14 +2,13 @@
 
 ## Setting up with pyenv
 
-1. Install pyenv.  Install Python 3.5.1.
+1. Install pyenv.  Install Python 2.7.10.
 2. Change into the directory containing this project
-2. `python setup.py install` or `pip install -r requirements.txt`
-3. `./thumbp_server -h`
+3. `pip install -r requirements.txt`
 
 ## Setting up with virtualenv
 
-1. Install pyenv and Python 3.5.1 as above
+1. Install pyenv and Python 2.7.10 as above
 2. `virtualenv thumbp`  (Creates a virtualenv directory tree)
 3. `cd thumbp`
 4. `. bin/activate`
@@ -28,25 +27,20 @@ py.test -v
 
 ## Example invocation
 
+This runs the application in a `twistd` webserver without detaching from your
+console:
 ```
-$ ./thumbp_server -e http://my-es-server:9200/dpla_alias/item -l app.log \
-   -f thumbp.pid
+$ ES_BASE=http://es-loadbal:9200/dpla_alias/item twistd -n web \
+  --class=thumbp.thumbp.resource
 ```
 
 Example thumbnail given that invocation:
 `http://localhost:8080/thumb/aacca3079a48aaacc3cdb473379048fc`
 
-## Why Gevent + Flask + Python?
-
-1. I've used gevent before and can get this up and running quickly
-2. I'd rather not tie this in with the frontend or API apps for various reasons.
-3. It's event-based (like NGINX) and handles concurrent requests well.
-4. It's small memory-wise (~ 23 MB in my experience) and code-wise.
 
 ## TODO
 
-* Get server to detach when it runs and log to a provided file instead of
-  stderr. (See WSGIServer re logging.)
+* Improve logging
 * We may want to pass through more headers, like Last-Modified, although this
   is intended to run behind a reverse proxy like NGINX with aggressive caching
   being forced.
