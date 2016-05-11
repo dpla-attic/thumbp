@@ -1,0 +1,35 @@
+{
+  "name": "thumbp",
+  "version": "0.1.0",
+  "description": "DPLA Thumbnail Proxy",
+  "main": "thumbp.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpla/thumbp.git"
+  },
+  "author": {
+    "name": "Digital Public Library of America"
+  },
+  "contributors": [
+    {
+      "name": "Mark Breedlove",
+      "email": "mb@dp.la"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://issues.dp.la/projects/triage"
+  },
+  "homepage": "https://github.com/dpla/thumbp#readme",
+  "dependencies": {
+    "request": "2.x"
+  },
+  "devDependencies": {
+    "chai": "3.x",
+    "expect.js": "0.3.x",
+    "sinon": "1.x"
+  }
+}
