@@ -208,14 +208,17 @@ describe('Connection', function() {
                     'content-type': 'image/jpeg',
                     'content-length': '4833',
                     'server': 'Apache',
-                    'connection': 'keep-alive'
+                    'connection': 'keep-alive',
+                    'last-modified': 'Mon, 18 Apr 2016 12:00:00 GMT'
                 },
                 statusCode: 200
             };
         });
 
         it('cleans up the response headers', function() {
-            var goodKeys = ['Content-Length', 'Content-Type', 'Date'];
+            var goodKeys = [
+                'Content-Length', 'Content-Type', 'Date', 'Last-Modified'
+            ];
             c.handleImageResponse(imgResponse);
             expect(imgResponse.headers).to.only.have.keys(goodKeys);
         });
