@@ -244,9 +244,9 @@ describe('Connection', function() {
             };
         });
 
-        it('assigns Content-Length 0 if it is not given', function() {
+        it('leaves Content-Length out if it is not given', function() {
             c.handleImageResponse(imgResponse);
-            expect(imgResponse.headers['Content-Length']).to.equal('0');
+            expect(imgResponse.headers['Content-Length']).to.be.undefined;
         });
 
         it('leaves Content-Type out if it is not given', function() {
