@@ -140,13 +140,13 @@ Connection.prototype.proxyImage = function() {
  */
 Connection.prototype.handleImageResponse = function(imgResponse) {
     // Reduce headers to just those that we want to pass through
-    var cl = imgResponse.headers['content-length'] || '0';
+    var cl = imgResponse.headers['content-length'] || false;
     var ct = imgResponse.headers['content-type'] || false;
     var lm = imgResponse.headers['last-modified'] || false;
     imgResponse.headers = {
         'Date': imgResponse.headers['date'],
-        'Content-Length': cl
     };
+    cl && (imgResponse.headers['Content-Length'] = cl);
     ct && (imgResponse.headers['Content-Type'] = ct);
     lm && (imgResponse.headers['Last-Modified'] = lm);
 
