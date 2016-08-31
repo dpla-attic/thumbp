@@ -1,6 +1,6 @@
 {
   "name": "thumbp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "DPLA Thumbnail Proxy",
   "main": "thumbp.js",
   "scripts": {
