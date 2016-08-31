@@ -78,19 +78,32 @@ Connection.prototype.lookUpImage = function() {
  * to proxying the image if it's OK.
  */
 Connection.prototype.checkSearchResponse = function(error, response, body) {
+    var item_data,  // Parsed Elasticsearch response
+        obj,        // The 'object' property in the ES response
+        url;        // Thumbnail image URL
     if (!error && response.statusCode == 200) {
         try {
-            var item_data = JSON.parse(body);
+            item_data = JSON.parse(body);
             if (item_data['hits']['total'] == 0) {
                 this.returnError(404);
                 return;
             }
-            var url = item_data['hits']['hits'][0]['fields']['object'];
+            obj = item_data['hits']['hits'][0]['fields']['object'];
+            if (Array.isArray(obj)) {
+                url = obj[0];  // [0] could be undefined (== false)
+            } else if (typeof obj == 'string') {
+                url = obj;
+            } else {
+                url = false;
+            }
             if (url) {
                 this.imageURL = url;
                 this.proxyImage();
             } else {
-                console.error(`no object property for item ${this.itemID}`);
+                // Empty string or empty array, or incorrect 'object' type
+                console.error(
+                    `empty / invalid object property for item ${this.itemID}`
+                );
                 this.returnError(404);
             }
         } catch (e) {

@@ -146,26 +146,6 @@ describe('Connection', function() {
             assert(returnErrorStub.calledWith(404));
         });
 
-        it('gives a 404 and logs if item has no object property', function() {
-            var noObjectBody = JSON.stringify({
-                hits: {
-                    total: 1,
-                    hits: [
-                        {
-                            fields: {
-                                id: itemID
-                            }
-                        }
-                    ]
-                }
-            });
-            var errMsg = `no object property for item ${itemID}`;
-            c.itemID = itemID;
-            c.checkSearchResponse(error, response, noObjectBody);
-            assert(returnErrorStub.calledWith(404));
-            assert(consoleErrorStub.calledWith(errMsg));
-        });
-
         it('gives a 500 and logs if there is a parsing problem', function() {
             var badBody = JSON.stringify({});
             c.checkSearchResponse(error, response, badBody, itemID);
@@ -177,6 +157,68 @@ describe('Connection', function() {
             c.checkSearchResponse('the error', {}, {}, itemID);
             assert(returnErrorStub.calledWith(500));
             assert(consoleErrorStub.called);
+        });
+
+        it('takes 1st element of "object" field that is an array', function() {
+            bodyWithObjArray = JSON.stringify({
+                hits: {
+                    total: 1,
+                    hits: [
+                        {
+                            fields: {
+                                id: itemID,
+                                object: [imageURL, 'x']
+                            }
+                        }
+                    ]
+                }
+            });
+            c.itemID = itemID;
+            c.checkSearchResponse(error, response, bodyWithObjArray);
+            expect(c.imageURL).to.equal(imageURL);
+        });
+
+        describe('... with no object property', function() {
+
+            var noObjectData, errMsg;
+
+            beforeEach(function() {
+                noObjectData = {
+                    hits: {
+                        total: 1,
+                        hits: [
+                            {
+                                fields: {
+                                    id: itemID
+                                }
+                            }
+                        ]
+                    }
+                };
+                errMsg = `empty / invalid object property for item ${itemID}`;
+                c.itemID = itemID;
+            });
+
+            it('returns 404 & logs if no object property', function() {
+                var noObjectBody = JSON.stringify(noObjectData);
+                c.checkSearchResponse(error, response, noObjectBody);
+                assert(returnErrorStub.calledWith(404));
+                assert(consoleErrorStub.calledWith(errMsg));
+            });
+
+            it('returns 404 & logs if object is empty / wrong', function() {
+                empties = [[], '', {'x': 'is wrong type'}];
+                for (var i = 0; i < empties.length; i++) {
+                    var obj = empties[i];
+                    noObjectData['hits']['hits'][0]['fields']['object'] = obj;
+                    var noObjectBody = JSON.stringify(noObjectData);
+                    c.checkSearchResponse(error, response, noObjectBody);
+                    assert(returnErrorStub.calledWith(404));
+                    assert(consoleErrorStub.calledWith(errMsg));
+                    consoleErrorStub.reset();
+                }
+            });
+
         });
 
     });  // checkSearchResponse
