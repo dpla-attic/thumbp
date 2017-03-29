@@ -66,7 +66,14 @@ describe('Connection', function() {
             assert(returnErrorStub.calledWith(400));
         });
 
-        it('proceeds if given a valid ID', function() {
+        it('returns a 400 error if given an invalid item type', function() {
+            itemID = '223ea5040640813b6c8204d1e0778d30';
+            request.url = `/invalid/${itemID}`;
+            c.handleReqEnd();
+            assert(returnErrorStub.calledWith(400));
+        });
+
+        it('proceeds if given a valid item type and ID', function() {
             itemID = '223ea5040640813b6c8204d1e0778d30';
             request.url = `/thumb/${itemID}`;
             c.handleReqEnd();
@@ -110,7 +117,8 @@ describe('Connection', function() {
                 statusCode: 200
             };
             itemID = 'f8f8a58a5a5ef34ffd4f8e399eaeb740';
-            imageURL = 'http://example.org/image1.jpg';
+            imageURL = 'http://example.org/bar/thumbnail';
+            itemType = 'thumb'
             okBody = JSON.stringify({
                 hits: {
                     total: 1,
@@ -129,9 +137,18 @@ describe('Connection', function() {
 
         it('calls proxyImage() with a successful query result', function() {
             c.itemID = itemID;
+            c.itemType = itemType;
             c.checkSearchResponse(error, response, okBody);
             assert(proxyImageStub.called);
             expect(c.imageURL).to.equal(imageURL);
+        });
+
+        it('gets iiif image if called for', function() {
+            c.itemID = itemID;
+            c.itemType = 'large';
+            c.checkSearchResponse(error, response, okBody);
+            assert(proxyImageStub.called);
+            expect(c.imageURL).to.equal('http://example.org/bar/large_image');
         });
 
         it('gives a 404 if the ID could not be found', function() {
@@ -174,6 +191,7 @@ describe('Connection', function() {
                 }
             });
             c.itemID = itemID;
+            c.itemType = itemType;
             c.checkSearchResponse(error, response, bodyWithObjArray);
             expect(c.imageURL).to.equal(imageURL);
         });

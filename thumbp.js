@@ -5,7 +5,7 @@ const libRequest = require('request');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
-const path_pat = /^\/thumb\/([a-f0-9]{32})$/;
+const path_pat = /^\/(thumb|large)\/([a-f0-9]{32})$/;
 const es_base = process.argv[2] || 'http://localhost:9200/dpla_alias/item';
 const port = process.argv[3] || '8080';
 
@@ -39,6 +39,7 @@ function Connection(request, response) {
     });
     this.imageURL = null;
     this.itemID = null;
+    this.itemType = null;
 }
 
 exports.Connection = Connection;  // Exported for the sake of our tests
@@ -51,7 +52,8 @@ Connection.prototype.handleReqEnd = function() {
     if (this.request.method === 'GET') {
         var match_result = path_pat.exec(this.request.url);
         if (match_result !== null) {
-            this.itemID = match_result[1];
+            this.itemType = match_result[1];
+            this.itemID = match_result[2];
             this.lookUpImage();
         } else {
             this.returnError(400);
@@ -97,7 +99,16 @@ Connection.prototype.checkSearchResponse = function(error, response, body) {
                 url = false;
             }
             if (url) {
-                this.imageURL = url;
+                if (this.itemType == 'large') {
+                    // Extrapolate IIIF image URL from thumbnail URL.
+                    // Assumes all thumbnail URLs end in '/thumbnail'.
+                    // Assumes all IIIF image URLs are identical to thumbnail
+                    // URLs except they end in '/large_image' instead of
+                    // '/thumbnail'.
+                    this.imageURL = url.replace(/thumbnail$/, 'large_image');
+                } else {
+                    this.imageURL = url;
+                }
                 this.proxyImage();
             } else {
                 // Empty string or empty array, or incorrect 'object' type
