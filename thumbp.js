@@ -131,7 +131,7 @@ Connection.prototype.proxyImage = function() {
             headers: {
                 'User-Agent': 'DPLA thumbp (https://github.com/dpla/thumbp)'
             },
-            timeout: 4000  // ms
+            timeout: 10000  // ms
         }).on('response', (response) => {
             this.handleImageResponse(response);
         }).on('error', (error) => {
