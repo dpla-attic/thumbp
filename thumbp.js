@@ -192,7 +192,7 @@ Connection.prototype.handleImageResponse = function(imgResponse) {
  * Handle errors with the HTTP connection to the image webserver.
  */
 Connection.prototype.handleImageConnectionError = function(error) {
-    console.error(error);
+    console.error(`Error (${error.code}) for ${this.imageURL}`);
     if (error.code === 'ETIMEDOUT') {
         this.returnError(504);
     } else {

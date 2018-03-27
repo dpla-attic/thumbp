@@ -327,6 +327,7 @@ describe('Connection', function() {
         var error;
 
         beforeEach(function() {
+            c.imageURL = 'http://example.org/img.jpg';
             error = {
                 code: 'ECONNREFUSED'
             };
@@ -334,7 +335,8 @@ describe('Connection', function() {
 
         it('logs errors', function() {
             c.handleImageConnectionError(error);
-            assert(consoleErrorStub.calledWith(error));
+            msg = 'Error (ECONNREFUSED) for http://example.org/img.jpg';
+            assert(consoleErrorStub.calledWith(msg));
         });
 
         it('returns a 504 Gateway Timeout for a timeout', function() {
