@@ -234,7 +234,7 @@ describe('Connection', function() {
 
             expect(opts['uri']).to.equal(url);
             expect(opts['method']).to.equal('GET');
-            expect(opts['timeout']).to.equal(4000);  // currently hardcoded
+            expect(opts['timeout']).to.equal(10000);  // currently hardcoded
             expect(opts['headers']['User-Agent']).to.be.a('string');
         });
     });
